@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔥 Анимированный Кликер 🔥</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: radial-gradient(circle at center, #1e0033, #000);
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff; }
+      to { text-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff; }
+    }
+
+    #score {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    #clickButton {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: none;
+      background: radial-gradient(circle, #ff00ff, #9900ff);
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      box-shadow: 0 0 20px #ff00ff;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    #clickButton:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 40px #00ffff;
+    }
+
+    #clickButton:active {
+      transform: scale(0.9);
+    }
+
+    .particle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle, #00ffff, transparent);
+      border-radius: 50%;
+      animation: explode 0.6s ease-out forwards;
+    }
+
+    @keyframes explode {
+      from { transform: scale(1) translate(0, 0); opacity: 1; }
+      to { transform: scale(2) translate(var(--x), var(--y)); opacity: 0; }
+    }
+
+    .floating-text {
+      position: absolute;
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 20px;
+      opacity: 0;
+      animation: floatUp 1s ease-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-80px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>💥 Clicker Game 💥</h1>
+  <div id="score">Очки: 0</div>
+  <button id="clickButton">Нажми!</button>
+
+  <script>
+    let score = 0;
+    const scoreDisplay = document.getElementById("score");
+    const button = document.getElementById("clickButton");
+
+    button.addEventListener("click", (e) => {
+      score++;
+      scoreDisplay.textContent = "Очки: " + score;
+
+      createParticles(e);
+      createFloatingText(e, "+1");
+    });
+
+    function createParticles(e) {
+      const count = 10;
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement("div");
+        particle.classList.add("particle");
+
+        const x = (Math.random() - 0.5) * 200 + "px";
+        const y = (Math.random() - 0.5) * 200 + "px";
+        particle.style.setProperty("--x", x);
+        particle.style.setProperty("--y", y);
+
+        particle.style.left = e.clientX + "px";
+        particle.style.top = e.clientY + "px";
+        document.body.appendChild(particle);
+
+        setTimeout(() => particle.remove(), 600);
+      }
+    }
+
+    function createFloatingText(e, text) {
+      const floatingText = document.createElement("div");
+      floatingText.classList.add("floating-text");
+      floatingText.textContent = text;
+      floatingText.style.left = e.clientX + "px";
+      floatingText.style.top = e.clientY + "px";
+      document.body.appendChild(floatingText);
+      setTimeout(() => floatingText.remove(), 1000);
+    }
+  </script>
+</body>
+</html>
